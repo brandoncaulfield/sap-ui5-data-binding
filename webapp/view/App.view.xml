@@ -47,6 +47,22 @@
                     }"
                     text="{i18n>sendEmail}"/>
             </l:VerticalLayout>
+            <l:VerticalLayout>
+                <Label labelFor="salesAmount" 
+                       text="{i18n>salesAmount}:"/>
+                <Input description="{/currencyCode}"  
+                       enabled="{/enabled}"
+                       id="salesAmount"
+                       value="{
+                           parts: [
+                            {path: '/salesAmount'},
+                            {path: '/currencyCode'}
+                           ],
+                           type: 'sap.ui.model.type.Currency',
+                           formatOptions: {showMeasure: false}
+                       }"
+                       width="200px"/>
+            </l:VerticalLayout>
         </content>
     </Panel>
 </mvc:View>
