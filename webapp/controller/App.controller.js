@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/m/library",
     "sap/ui/core/Locale",
     "sap/ui/core/LocaleData",
-    "sap/ui/model/type/Currency"
-], function (Controller, mobileLibrary, Locale, LocaleData, Currency) {
+    "sap/ui/model/type/Currency",
+    "sap/m/ObjectAttribute"
+], function (Controller, mobileLibrary, Locale, LocaleData, Currency, ObjectAttribute) {
     "use strict"
 
     return Controller.extend("sap.ui.demo.db.controller.App", {
@@ -29,6 +30,29 @@ sap.ui.define([
             var sPath = oContext.getPath();
             var oProductDetailPanel = this.byId("productDetailsPanel");
             oProductDetailPanel.bindElement({ path: sPath, model: "products"});
+        },
+        productListFactory: function(sId, oContext) {
+            var oUIControl;
+
+            // Decide based on the data which dependent to clone
+            if (oContext.getProperty("UnitsInStock") === 0 && oContext.getProperty("Discontinued")) {
+                // The item is discontinued, so use a StandardListItem
+                oUIControl = this.byId("productSimple").clone(sId);
+            } else {
+                // The item is available, so we will create an ObjectListItem
+                oUIControl = this.byId("productExtended").clone(sId);
+
+                // the item is temporarily out of stock, so we will add a status
+                if (oContext.getProperty("UnitsInStock") < 1) {
+                    oUIControl.addAttribute(new ObjectAttribute({
+                        text : {
+                            path: "i18n>outOfStock"
+                        }
+                    }))
+                }
+            }
+
+            return oUIControl;
         }
     })
 })

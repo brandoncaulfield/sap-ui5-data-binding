@@ -1,6 +1,7 @@
 <mvc:View
     controllerName="sap.ui.demo.db.controller.App"
     xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     xmlns:form="sap.ui.layout.form"
     xmlns:l="sap.ui.layout"
     xmlns:mvc="sap.ui.core.mvc">
@@ -70,37 +71,20 @@
         class="sapUiResponsiveMargin"
         width="auto">
         <List
-            headerText="{ia8n>productListTitle}"
-            items="{products>/Products}">
-            <ObjectListItem 
-                press=".onItemSelected"
-                type="Active"
-                title="{products>ProductName}"
-                number="{
-                    parts:[
-                        {path: 'products>UnitPrice'},
-                        {path: '/currencyCode'}
-                    ],
-                    type: 'sap.ui.model.type.Currency',
-                    formatOptions: {showMeasure: false}
-                }"
-                numberUnit="{/currencyCode}"
-                numberState="{= ${products>UnitPrice} > ${/priceThreshold} ? 'Error' : 'Success' }">
-                <attributes>
-                    <ObjectAttribute 
-                        text="{products>QuantityPerUnit}"/>
-                    <ObjectAttribute
-                        title="{i18n>stockValue}"
-                        text="{
-                            parts:[
-                                {path: 'products>UnitPrice'},
-                                {path: 'products>UnitsInStock'},
-                                {path: '/currencyCode'}
-                            ],
-                            formatter: '.formatStockValue'
-                        }"/>
-                </attributes>
-            </ObjectListItem>     
+            id="ProductList"
+            headerText="{i18nproductListTitle}" 
+            items="{
+                path: 'products>/Products',
+                factory: '.productListFactory'
+            }">
+            <dependents>
+                <core:Fragment 
+                    fragmentName="sap.ui.demo.db.view.ProductSimple"
+                    type="XML"/>
+                <core:Fragment 
+                    fragmentName="sap.ui.demo.db.view.ProductExtended"
+                    type="XML"/>
+            </dependents>    
         </List>
     </Panel>
     <Panel
